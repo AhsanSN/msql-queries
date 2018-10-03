@@ -26,6 +26,26 @@ CREATE TABLE bookAuthor (
 
 );
 
+Create table Customer
+(
+	CustId Int Identity(1,1) Not null,
+	CustName varchar(50) not null,
+	Primary Key (CustId)
+);
+
+go
+
+Create table CustOrder
+(
+	OrderId Int Identity(1,1) Not null,
+	fkCustId Int not null,
+	orderDate date not null,
+	orderValue money not null,
+	Primary Key (OrderId),
+	Foreign Key (fkCustId) References Customer(CustId)
+);
+
+go
 
 /** data entry **/
 

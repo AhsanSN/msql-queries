@@ -1,0 +1,34 @@
+CREATE TABLE author (
+    authorCode varchar(55),
+    authorName varchar(55),
+	PRIMARY KEY (authorCode)
+);
+
+CREATE TABLE book (
+    isbn varchar(55),
+    title varchar(55),
+	price money,
+    publisherCode varchar(55),
+	PRIMARY KEY (isbn)
+);
+
+CREATE TABLE publisher (
+    publisherCode varchar(55),
+    publisherName varchar(55),
+	PRIMARY KEY (publisherCode)
+);
+
+CREATE TABLE bookAuthor (
+    isbn varchar(55),
+    authorCode varchar(55),
+	FOREIGN KEY (isbn) REFERENCES book(isbn),
+	FOREIGN KEY (authorCode) REFERENCES author(authorCode),
+
+);
+
+
+/** data entry **/
+
+
+
+

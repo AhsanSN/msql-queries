@@ -49,6 +49,8 @@ go
 
 /** data entry **/
 
+Insert into Customer Values ('first cost')
+Insert into Customer Values ('seconst cost')
 
 
 

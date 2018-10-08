@@ -91,17 +91,18 @@ Where
 
 	**/
 
-	Declare @index int
+Declare @index int
 
 	set @index = 1
 
 	while @index <= 50000
 
 	Begin
-
-	print cast(Rand()*2 as int)+1,, dateadd(cast(rand()*1000 as int))
-	set @index  = @index = 1
+	Insert into custorder values(cast(Rand()*2 as int)+1, dateadd(dd, cast(rand()*1000 as int),'01-Jan-2017'), cast(rand()*50000 as int)/100 +10.00)
+	
+	set @index  = @index + 1
 
 	end
 
+	select * from custorder
 

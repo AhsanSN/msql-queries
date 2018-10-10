@@ -106,3 +106,100 @@ Declare @index int
 
 	select * from custorder
 
+
+/** 
+Q1
+
+
+select 
+	* 
+from 
+	Warehouse.StockItems
+**/
+
+/** 
+Q2
+
+
+select 
+	StockItemName, UnitPrice, Brand, Size, SupplierID
+from 
+	Warehouse.StockItems
+
+**/
+
+/** 
+Q3
+
+
+select 
+	orderid, orderdate, customerid
+from 
+	sales.orders
+where
+	**/
+
+/** 
+Q4
+
+select 
+	*
+from 
+	Warehouse.StockItems
+where
+	supplierid = 4 and unitpackageprice <30
+	**/
+
+/** 
+Q5
+
+
+select 
+	*
+from 
+	Warehouse.StockItems
+where
+	supplierid in (12,5,7) and unitprice >15
+	**/
+
+	/** 
+Q6
+
+
+select 
+	*
+from 
+	Warehouse.StockItems
+where
+	ColorID is NULL
+
+	**/
+
+		/** 
+Q1
+
+
+select 
+	*
+from 
+	sales.OrderLines
+where
+	OrderID between 40 and 50
+
+	**/
+
+			/** 
+Q2
+
+**/
+select 
+	*
+from 
+	sales.OrderLines
+where
+	OrderID between 40 and 50
+
+
+
+	
+

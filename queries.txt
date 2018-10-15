@@ -200,6 +200,19 @@ where
 	OrderID between 40 and 50
 
 
+-- select * from Warehouse.StockItems
+--select * from Purchasing.Suppliers P inner join Warehouse.StockItems W on p.
+ --where SupplierID in (12,5,7)
+-- select * from Warehouse.StockItems where ColorID is null
+-- select * from Warehouse.StockItems where CustomFields like '%china%' and Tags like '%comedy%'
+-- select * from Warehouse.StockItems where CustomFields like '%"32gb","usb powered"%'
+-- select * from Warehouse.StockItems where CustomFields like '%"32gb","usb powered"%'
+
+select 
+	si.stockitemname [item name], up.packagetypename [unit package], op.packagetypename [outer package]
+from
+	Warehouse.StockItems si inner join Warehouse.PackageTypes up on si.UnitPackageID = up.PackageTypeID 
+		inner join  Warehouse.PackageTypes op on si.OuterPackageID = op.PackageTypeID
 
 	
 

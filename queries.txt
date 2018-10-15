@@ -214,5 +214,23 @@ from
 	Warehouse.StockItems si inner join Warehouse.PackageTypes up on si.UnitPackageID = up.PackageTypeID 
 		inner join  Warehouse.PackageTypes op on si.OuterPackageID = op.PackageTypeID
 
+/**
+select 
+	* 
+from
+	sales.BuyingGroups BG inner join sales.Customers C 
+		on bg.BuyingGroupID = c.BuyingGroupID 
+	inner join sales.CustomerCategories cc
+		on cc.CustomerCategoryID = c.CustomerCategoryID
+
+
+select * from
+Warehouse.Colors C inner join Warehouse.StockItems Si on C.ColorID = Si.ColorID
+where c.ColorName in ('red','green', 'white')
+
+**/
+
+select * from sales.BuyingGroups bg inner join sales.Customers c on bg.BuyingGroupID = c.BuyingGroupID
+
 	
 

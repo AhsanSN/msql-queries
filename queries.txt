@@ -255,6 +255,7 @@ order by 2
 
 --exercise week 8 lab 
 
+/**
 -- q1
 select 
 	count(*) as "number of orders"
@@ -273,15 +274,39 @@ where
 select 
 	count(*) as "number of customers"
 from
-	sales.Customers
+	sales.Customers cu inner join Application.Cities ci on ci.CityID = cu.PostalCityID
+	inner join Application.StateProvinces sp on sp.StateProvinceID = ci.StateProvinceID 
 where
-	PostalAddressLine2 like '%texas%'
+	 sp.StateProvinceName = 'texas'
 
 -- q4
 select 
 	count(*) as "number of items"
 from
-	sales.orders
+	sales.orderlines
 where
-	OrderID like '%10%'
+	OrderID = 10
+
 	
+
+-- q5
+select 
+	datepart(year,orderdate), count(*) as "number of orders"
+from
+	sales.Orders
+group by datepart(year,orderdate)
+order by datepart(year,orderdate)
+
+	**/
+
+-- q6
+select 
+	datepart(year,orderdate), count() as "number of orders"
+from
+	sales.Customers cu inner join Application.Cities ci on ci.CityID = cu.PostalCityID
+	inner join Application.StateProvinces sp on sp.StateProvinceID = ci.StateProvinceID 
+group by cu.
+order by datepart(year,orderdate)
+
+
+

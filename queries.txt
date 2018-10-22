@@ -244,3 +244,44 @@ from
 	custorder
 group by orderdate
 order by numorders desc
+
+select 
+	orderdate, count(*) as numorders, sum(ordervalue) as totalvalue
+from
+	custorder
+group by orderdate
+having count(*) < 35
+order by 2
+
+--exercise week 8 lab 
+
+-- q1
+select 
+	count(*) as "number of orders"
+from
+	sales.Orders
+
+-- q2
+select 
+	count(*) as "number of orders"
+from
+	sales.Orders
+where
+	datepart(year, OrderDate) = '2015'
+	
+-- q3
+select 
+	count(*) as "number of customers"
+from
+	sales.Customers
+where
+	PostalAddressLine2 like '%texas%'
+
+-- q4
+select 
+	count(*) as "number of items"
+from
+	sales.orders
+where
+	OrderID like '%10%'
+	

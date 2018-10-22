@@ -232,5 +232,15 @@ where c.ColorName in ('red','green', 'white')
 
 select * from sales.BuyingGroups bg inner join sales.Customers c on bg.BuyingGroupID = c.BuyingGroupID
 
-	
+Select top 5 from custOrder order by ordervalue desc
 
+Select count(*) from custorder
+
+select distinct orderdate from custorder
+
+select 
+	orderdate, count(*) as numorders
+from
+	custorder
+group by orderdate
+order by numorders desc

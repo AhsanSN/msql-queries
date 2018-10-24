@@ -336,14 +336,25 @@ from
 sales.OrderLines
 
 
-**/
-
 -- q10
-
-select top 12 * from Application.People
-
 select 
-	*
+	fullname, count(*) as 'countn'
 from
 	Application.People p inner join Sales.Orders o on p.PersonID = o.SalespersonPersonID
+where month(PickingCompletedWhen) = 1 and year(PickingCompletedWhen) = '2015'
+group by p.FullName
+having count(*) >  200
+
+**/
+
+-- q11
+--select top 2 * from Sales.Orders
+
+select 
+	 top 1 c.CustomerName, count(*) 
+from
+	Sales.Orders o inner join Sales.Customers c on o.CustomerID = c.CustomerID
+group by c.CustomerName
+
+
 

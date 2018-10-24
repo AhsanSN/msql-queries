@@ -297,9 +297,9 @@ from
 group by datepart(year,orderdate)
 order by datepart(year,orderdate)
 
-	**/
+	
 
--- q6
+-- q6 (not done)
 select 
 	datepart(year,orderdate), count() as "number of orders"
 from
@@ -308,5 +308,42 @@ from
 group by cu.
 order by datepart(year,orderdate)
 
+-- q7
+select 
+	c.CustomerName, count(*) as 'nOrders'
+from
+	sales.Customers c inner join sales.Orders o on c.CustomerID = o.CustomerID
+where datepart(year,o.orderdate) = '2016'
+group by c.CustomerName
+having count(*)>20
+order by nOrders desc
 
+
+
+-- q8
+
+select Sg.StockGroupID, COUNT(*) as 'nItems', min(UnitPrice) as 'min', max(UnitPrice) as 'max', avg(UnitPrice) as 'avg'
+from
+	Warehouse.StockGroups SG inner join Warehouse.StockItemStockGroups SI on SG.StockGroupID = Si.StockGroupID
+	inner join Sales.OrderLines ol on si.StockItemID = ol.StockItemID
+group by sg.StockGroupID
+
+
+-- q9
+select 
+	StockItemID, Quantity, total = ((UnitPrice * Quantity) *(1+ TaxRate) )
+from
+sales.OrderLines
+
+
+**/
+
+-- q10
+
+select top 12 * from Application.People
+
+select 
+	*
+from
+	Application.People p inner join Sales.Orders o on p.PersonID = o.SalespersonPersonID
 

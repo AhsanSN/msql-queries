@@ -253,6 +253,12 @@ group by orderdate
 having count(*) < 35
 order by 2
 
+-- people with top salaries
+select * from Warehouse.StockItems where RecommendedRetailPrice = (
+select top 1 RecommendedRetailPrice from Warehouse.StockItems order by RecommendedRetailPrice desc
+)
+
+
 --exercise week 8 lab 
 
 /**

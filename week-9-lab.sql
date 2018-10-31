@@ -15,7 +15,6 @@ from
 where year(o.OrderDate)=2016 and month(o.OrderDate)= 3
 group by c.CustomerID
 )
-**/
 
 -- 2. Select orders that contain items that are packaged in 'Pair'.
 
@@ -41,4 +40,21 @@ where
 					pt.PackageTypeName = 'pair'
 			)
 	)
-	--order, orderlines, stockitem, package
+
+	
+
+
+-- find the employee who processed the first order in year 2015
+
+select
+	 top 1 PersonID, FullName
+from
+	Application.people p INNER JOIN sales.orders o on p.PersonID = o.SalespersonPersonID
+where
+	year(o.PickingCompletedWhen) = 2015
+order by
+	month(o.PickingCompletedWhen) , day(o.PickingCompletedWhen)
+	
+	**/
+
+

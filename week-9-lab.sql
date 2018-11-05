@@ -55,6 +55,15 @@ where
 order by
 	month(o.PickingCompletedWhen) , day(o.PickingCompletedWhen)
 	
-	**/
+	-- 4. Select all orders that have backorders. The result will show the duration (in days) between pickup of two orders
 
+select
+	DATEDIFF(day,rig.PickingCompletedWhen,lef.PickingCompletedWhen) as 'diff of pickup dates'
+from
+	sales.Orders lef inner join sales.Orders rig on lef.OrderID = rig.BackorderOrderID
+where 
+	rig.BackorderOrderID is not null-- and lef.BackorderOrderID is null
+	and (rig.PickingCompletedWhen is not null
+	and lef.PickingCompletedWhen is not null)
 
+**/

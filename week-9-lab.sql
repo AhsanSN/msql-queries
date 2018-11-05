@@ -76,3 +76,15 @@ FROM
 	sales.Orders o
 
 **/
+
+
+-- 6. Select all orders and their backorders. In case the backorder is not there, the order should
+-- still appear with backorder id NUll.
+-- Result : OrderID, PickingCompletionDate for order, BackOrderID, PickingCompletionDate for
+-- BackOrder, Difference between two dates.
+
+select
+	o.OrderID, o.PickingCompletedWhen,  o.BackorderOrderID, bo.PickingCompletedWhen, DATEDIFF(day, o.PickingCompletedWhen, bo.PickingCompletedWhen) as 'diff'	
+from
+	sales.Orders o left outer join sales.Orders bo on o.OrderID = bo.BackorderOrderID
+

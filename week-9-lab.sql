@@ -75,7 +75,7 @@ select
 FROM 
 	sales.Orders o
 
-**/
+
 
 
 -- 6. Select all orders and their backorders. In case the backorder is not there, the order should
@@ -87,4 +87,24 @@ select
 	o.OrderID, o.PickingCompletedWhen,  o.BackorderOrderID, bo.PickingCompletedWhen, DATEDIFF(day, o.PickingCompletedWhen, bo.PickingCompletedWhen) as 'diff'	
 from
 	sales.Orders o left outer join sales.Orders bo on o.OrderID = bo.BackorderOrderID
+
+
+
+-- 8. Select all customers belonging to 'Florida' (using subquery).
+
+select 
+	*
+from 
+	sales.Customers cu 
+where
+	cu.PostalCityID in (
+		select
+			c.CityID
+		from
+			Application.Cities c inner join Application.StateProvinces s on c.StateProvinceID = s.StateProvinceID
+		where
+			s.StateProvinceName = 'florida'			
+	);
+
+**/
 

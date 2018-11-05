@@ -66,4 +66,13 @@ where
 	and (rig.PickingCompletedWhen is not null
 	and lef.PickingCompletedWhen is not null)
 
+
+
+-- 5. Select all orders and the difference between their order and delivery dates.
+
+select
+	o.orderid, DATEDIFF(day, o.OrderDate, o.ExpectedDeliveryDate) as 'diff'
+FROM 
+	sales.Orders o
+
 **/

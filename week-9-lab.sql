@@ -106,5 +106,16 @@ where
 			s.StateProvinceName = 'florida'			
 	);
 
-**/
+-- 9. Select all customers that have placed more than 5 orders in May, 2016.
+
+select
+	c.CustomerID, count(o.OrderID) as 'count'
+from
+	Sales.Customers c inner join sales.Orders o on c.CustomerID = o.CustomerID
+where 
+	datepart(month, o.OrderDate ) = 5 and datepart(year, o.OrderDate ) = 2016
+group by c.CustomerID
+having count(o.OrderID)>5
+
+	**/
 

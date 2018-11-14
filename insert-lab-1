@@ -1,0 +1,35 @@
+
+/**
+-- 1.
+
+insert into Warehouse.StockItems (stockItemName, SupplierID, ColorID, UnitPackageID, OuterPackageID, Size, LeadTimeDays,
+	 QuantityPerOuter,IsChillerStock,TaxRate,UnitPrice,RecommendedRetailPrice,
+TypicalWeightPerUnit,LastEditedBy)
+	 values ('Microsoft Hoodie with earphone (M)',4,3,7,6,'M',7,8,0,15,17.5,26.45,0.5,1);
+
+insert into Warehouse.StockItems (stockItemName, SupplierID, ColorID, UnitPackageID, OuterPackageID, Size, LeadTimeDays,
+	 QuantityPerOuter,IsChillerStock,TaxRate,UnitPrice,RecommendedRetailPrice,
+TypicalWeightPerUnit,LastEditedBy)
+	 values ('Microsoft Hoodie with earphone (L)',4,3,7,6,'L',7,8,0,15,17.5,26.45,0.5,1);
+
+insert into Warehouse.StockItems (stockItemName, SupplierID, ColorID, UnitPackageID, OuterPackageID, Size, LeadTimeDays,
+	 QuantityPerOuter,IsChillerStock,TaxRate,UnitPrice,RecommendedRetailPrice,
+TypicalWeightPerUnit,LastEditedBy)
+	 values ('Microsoft Hoodie with earphone (XL)',4,3,7,6,'XL',7,8,0,15,17.5,26.45,0.5,1);
+
+	 **/
+
+-- 2.
+
+insert into Warehouse.StockItems (StockItemName, SupplierID, ColorID, UnitPackageID, OuterPackageID,Size,
+LeadTimeDays,QuantityPerOuter,IsChillerStock,TaxRate,UnitPrice,RecommendedRetailPrice,
+TypicalWeightPerUnit,LastEditedBy)
+	 values ('MS Backpack', supplier of product ‘Microsoft Hoodie’,3,7,6,null,7,8,0,15,17.5,19.5,0.5,1);
+
+
+
+
+
+
+
+

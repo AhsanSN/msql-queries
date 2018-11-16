@@ -1,0 +1,271 @@
+-- Name: Syed Ahsan Ahmed
+-- ID: sa02908
+
+-- 1. List the number of Physicians in each department
+
+select
+	d.DepartmentID, count(d.DepartmentID) as 'No. of Physicians'
+from 
+	Physician p inner join Affiliated_With aw on p.EmployeeID = aw.Physician
+	inner join Department d on d.DepartmentID = aw.Department
+group by
+	d.DepartmentID
+
+go
+
+-- 2. List the name of Physician and Department in which physician is no longer affiliated
+
+select
+	p.Name, d.Name
+from 
+	Physician p inner join Affiliated_With aw on p.EmployeeID = aw.Physician
+	inner join Department d on d.DepartmentID = aw.Department
+where
+	aw.PrimaryAffiliation = 0
+
+go
+
+-- 3. List the name and position of all physicians affiliated with Surgery Department.
+
+select
+	p.Name, p.Position
+from 
+	Physician p inner join Affiliated_With aw on p.EmployeeID = aw.Physician
+	inner join Department d on d.DepartmentID = aw.Department
+where
+	d.Name like 'Surgery'
+	
+go	
+
+-- 4. List the names of all physicians that have performed a 
+	-- medical procedure that they are certified to perform, 
+	--but such that the procedure was done at a date (Undergoes.Date)
+	-- after the physician's certification expired 
+	--(Trained_In.CertificationExpires).
+
+select
+	p.Name
+from
+	Physician p inner join Trained_In t on p.EmployeeID = t.Physician
+	inner join Undergoes u on p.EmployeeID = u.Physician
+where
+	t.Treatment = u.[Procedure]
+	and t.CertificationExpires < u.[Date]
+
+	
+go
+
+--5. Same as the previous query, but include the following information 
+	-- in the results: Physician name, name of procedure, date when the 
+	-- procedure was carried out, name of the patient the procedure was 
+	-- carried out on, and date when the certification expired.
+
+select
+	p.Name as 'Physician', pro.Name as 'Procedure', u.Date as 'Date of procdeure',
+	 pro.name as 'Patient', t.CertificationExpires as 'Certification Expiry'
+from
+	Physician p inner join Trained_In t on p.EmployeeID = t.Physician
+	inner join Undergoes u on p.EmployeeID = u.Physician
+	inner join [procedure] pro on u.[procedure] = pro.Code
+where
+	t.Treatment = u.[Procedure]
+	and t.CertificationExpires < u.[Date]
+	
+go
+
+-- 6. List the count of Available and Not available rooms.
+
+select 
+	sum(case when Unavailable = 0 then 1 else 0 end) as [Available] ,
+	sum(case when Unavailable = 1 then 1 else 0 end) as [Unavailable]
+from Room
+
+go
+
+-- 7. Obtain the names of all patients (also include, for each patient, 
+	--the name of the patient's primary care physician), such that:
+    --a. The patient has been prescribed some medication by his/her 
+	-- primary care physician.
+	-- b. The patient's primary care physician is not the head of any department.
+
+-- 7.a
+
+select
+	pa.Name as [patient], ph.name as [Physician]
+from
+	patient pa inner join Physician ph on pa.pcp = ph.EmployeeID
+	inner join Prescribes pr on pr.Physician = ph.EmployeeID
+
+go
+
+-- 7. b
+
+select
+	pa.Name as [patient], ph.name as [Physician]
+from
+	patient pa inner join Physician ph on pa.pcp = ph.EmployeeID
+	inner join Prescribes pr on pr.Physician = ph.EmployeeID
+where
+	ph.EmployeeID not in (
+		select
+			phy.EmployeeID
+		from
+			Physician phy inner join Department dep on 
+			dep.Head = phy.EmployeeID
+
+	);
+
+go
+
+-- 8. List the number of days each patient stays at hospital.
+
+select
+	p.name as [Patient], case when s.StartDate is null then 0 else DATEDIFF(day, s.StartDate,  s.EndDate ) end as [Days patient stayed]
+from
+	Patient p left outer join stay s on p.SSN = s.Patient
+
+go
+
+-- 9. List number of appointments for each physician for the 
+	-- current month. Physicians having no appointment should also 
+	-- appear in the list with the count of zero.
+	-- (5, 7, 8) not showing zeros 
+
+select
+	p.EmployeeID, sum( case when DATEPART(MONTH, a.StartDate) = DATEPART(MONTH, GETDATE()) then 1 else 0 end) as [Number of Appointments]
+from 
+	Physician p left outer join Appointment a on a.Physician = p.EmployeeID
+group by p.EmployeeID
+
+go
+-- 10. List patients who have undergone same process more than once.
+  -- not done
+
+select 
+	*
+from
+	(
+	select
+		p.SSN, count(*)
+	from
+		Patient p inner join Undergoes u on p.SSN = u.Patient
+	group by p.SSN
+	)
+
+go	
+
+-- 11. List name of physicians and their certifications that are being 
+	--expired in a month.
+
+select 
+	py.Name, p.Name, t.CertificationExpires
+from 
+	Physician py inner join Trained_In t on t.Physician = py.EmployeeID
+	inner join [Procedure] p on t.Treatment = p.Code
+where
+	DATEDIFF(day, getdate(), t.CertificationExpires) between 30 and 0
+
+go
+-- 12. Find the physician having maximum number of certifications.
+
+select
+	pyName.Name, maxEmp.maxNo as [Number of Certifications]
+from
+(
+	select 
+		top 1 py.EmployeeID, count(*) as 'maxNo'
+	from 
+		Physician py inner join Trained_In t on t.Physician = py.EmployeeID
+	group by py.EmployeeID
+	order by 'maxNo' desc
+) maxEmp inner join Physician pyName on maxEmp.EmployeeID = pyName.EmployeeID
+
+go
+-- 13. List the names of all department heads along with the number of 
+	--physicians that come under them.
+
+select
+	p2.Name as [Name of Head], totalPeople.nPeople as [No of Physicians]
+from
+	(
+		select
+			d.DepartmentID, count(d.DepartmentID)-1 as 'nPeople'
+		from
+			Physician p inner join Affiliated_With a on p.EmployeeID = a.Physician
+			inner join Department d on a.Department = d.DepartmentID
+		group by d.DepartmentID
+	) totalPeople
+	inner join Department d2 on totalPeople.DepartmentID = d2.DepartmentID
+	inner join Physician p2 on p2.EmployeeID = d2.Head
+
+go
+
+-- 14. List number of times a patient has been admitted to the hospital 
+	-- and total number of days he was admitted for (for multiple admissions).
+
+select
+	p2.Name, admiCount.[No. of times admitted], admiCount.[Days of Stay]
+from
+	(
+		select
+			p.ssn, count(*) as [No. of times admitted], sum(DATEDIFF(day, s.StartDate, s.EndDate)) as [Days of Stay]
+		from 
+			Patient p inner join Stay s on p.SSN = s.Patient
+		group by p.SSN
+	) admiCount 
+	inner join Patient p2 on p2.SSN = admiCount.SSN
+
+
+go
+-- 15. List patients who have stayed for more than 10 days (in a single admission).
+
+select
+	p2.Name,  admiCount.[Days of Stay]
+from
+	(
+		select
+			p.ssn, (DATEDIFF(day, s.StartDate, s.EndDate)) as [Days of Stay]
+		from 
+			Patient p inner join Stay s on p.SSN = s.Patient
+		where
+			(DATEDIFF(day, s.StartDate, s.EndDate))> 10
+	) admiCount 
+	inner join Patient p2 on p2.SSN = admiCount.SSN
+
+go	
+-- 16. List number of treaments that are being done today. The list 
+-- should include the following information: Patient Name, Procedure 
+-- Name, Physician Name,start time, room
+
+select
+	uphpaProce.[Patient Name], uphpaProce.[Procedure Name], uphpaProce.[Physician Name], cast(uphpaProce.Date as time) [Time] , st.Room
+from
+	(
+		select
+			pa.Name as [Patient Name], uphpa.[Procedure Name], uphpa.[Physician Name], uphpa.Date, uphpa.[Procedure Id] , uphpa.Stay
+		from
+			(
+				select
+					uph.[Procedure Name], ph.Name as [Physician Name], uph.Date, uph.Patient, uph.[Procedure Id], uph.Stay
+				from
+					(
+						select
+							pr.Name as [Procedure Name],  under.Date, under.Patient, under.Physician, under.[Procedure Id], under.Stay
+						from 
+							(
+								select
+									u.Date, u.Patient, u.Physician, u.[Procedure] as [Procedure Id], u.Stay
+								from
+									Undergoes u
+								where
+									u.Date = GETDATE()
+							) under
+							inner join [Procedure] pr on pr.Code = under.[Procedure Id]
+					) uph
+					inner join Physician ph on ph.EmployeeID = uph.Physician
+			) uphpa
+			inner join Patient pa on pa.SSN = uphpa.Patient
+	)uphpaProce
+	inner join Stay st on st.StayID = uphpaProce.Stay
+
+go

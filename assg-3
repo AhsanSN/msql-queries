@@ -129,7 +129,6 @@ go
 -- 9. List number of appointments for each physician for the 
 	-- current month. Physicians having no appointment should also 
 	-- appear in the list with the count of zero.
-	-- (5, 7, 8) not showing zeros 
 
 select
 	p.EmployeeID, sum( case when DATEPART(MONTH, a.StartDate) = DATEPART(MONTH, GETDATE()) then 1 else 0 end) as [Number of Appointments]
@@ -139,18 +138,19 @@ group by p.EmployeeID
 
 go
 -- 10. List patients who have undergone same process more than once.
-  -- not done
 
 select 
-	*
+	p2.Name
 from
 	(
-	select
-		p.SSN, count(*)
-	from
-		Patient p inner join Undergoes u on p.SSN = u.Patient
-	group by p.SSN
-	)
+		select 
+			u.patient, count(*) as Repeats
+		from 
+			Undergoes u
+		group by u.Patient, u.[Procedure]
+	)p1
+	inner join Patient p2 on p2.SSN = p1.Patient
+where p1.Repeats > 1
 
 go	
 
@@ -258,7 +258,7 @@ from
 								from
 									Undergoes u
 								where
-									u.Date = GETDATE()
+									datepart(day, u.Date) = datepart(day, GETDATE()) and datepart(month, u.Date) = datepart(month, GETDATE()) and datepart(year, u.Date) = datepart(year, GETDATE()) 
 							) under
 							inner join [Procedure] pr on pr.Code = under.[Procedure Id]
 					) uph
